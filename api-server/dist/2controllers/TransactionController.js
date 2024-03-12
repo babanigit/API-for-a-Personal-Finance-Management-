@@ -18,27 +18,37 @@ const TransactionModel_1 = __importDefault(require("../model/TransactionModel"))
 // @routes GET/api/trans
 // @access private
 const getTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // const contacts = await Contact.find({ user_id: req.user.id });
-    // res.status(200).json(contacts);
+    try {
+        const customReq = req; // Type assertion
+        // it will find you all the user id's
+        const contacts = yield TransactionModel_1.default.find({ user_id: customReq.user.id });
+        res.status(200).json(contacts);
+    }
+    catch (error) {
+        console.error(error);
+    }
 }));
 exports.getTrans = getTrans;
-// @desc Create new  contacts
-// @routes POST/api/contacts
+// @desc Create new transaction
+// @routes POST/api/trans
 // @access private
 const createTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const customReq = req; // Type assertion
-        const { name, email, phone } = yield req.body;
-        if (!name || !email || !phone) {
+        const { name, email, phone, income, expenses } = yield req.body;
+        if (!name || !email || !phone || !income || !expenses) {
             res.status(400).json({ message: "all filed required" });
             // res.status(400);
             // throw new Error({ message: "all field are mandatory" });
         }
         else {
+            console.log(customReq.user);
             const contact = yield TransactionModel_1.default.create({
                 name,
                 email,
                 phone,
+                income,
+                expenses,
                 user_id: customReq.user.id,
             });
             res.status(201).json(contact);
@@ -49,63 +59,77 @@ const createTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 }));
 exports.createTrans = createTrans;
-// @desc get all contacts
-// @routes GET/api/contacts/:id
+// @desc get transaction by id
+// @routes GET/api/trans/:id
 // @access private
 const getTransId = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // const contact = await Contact.findById(req.params.id);
-    // if (!contact) {
-    //   res.status(404).json({ message: " contact not found" });
-    // } else {
-    //   res.status(200).json(contact);
-    // }
+    try {
+        const customReq = req; // Type assertion
+        const contact = yield TransactionModel_1.default.findById(customReq.params.id);
+        if (!contact) {
+            res.status(404).json({ message: " contact not found" });
+        }
+        else {
+            res.status(200).json(contact);
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
 }));
 exports.getTransId = getTransId;
-// @desc update contacts
-// @routes PUT/api/contacts/:id
+// @desc update trans
+// @routes PUT/api/trans/:id
 // @access private
 const updateTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // const contact = await Contact.findById(req.params.id);
-    // if (!contact) {
-    //   res.status(404).json({ message: " contact not found" });
-    // } else {
-    //   if (contact.user_id.toSting() != req.user.id) {
-    //     res
-    //       .status(403)
-    //       .json({
-    //         message: "user dont have permission update other user contacts",
-    //       });
-    //   } else {
-    //     const updateContact = await Contact.findByIdAndUpdate(
-    //       req.params.id,
-    //       req.body,
-    //       { new: true }
-    //     );
-    //     res.status(200).json(updateContact);
-    //   }
-    // }
+    try {
+        const customReq = req; // Type assertion
+        const contact = yield TransactionModel_1.default.findById(req.params.id);
+        if (!contact) {
+            res.status(404).json({ message: " contact not found" });
+        }
+        else {
+            if (contact.user_id.toString() != customReq.user.id) {
+                res
+                    .status(403)
+                    .json({
+                    message: "user dont have permission update other user contacts",
+                });
+            }
+            else {
+                const updateContact = yield TransactionModel_1.default.findByIdAndUpdate(customReq.params.id, customReq.body, { new: true });
+                res.status(200).json(updateContact);
+            }
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
 }));
 exports.updateTrans = updateTrans;
-// @desc delete contacts
-// @routes DELETE/api/contacts/:id
+// @desc delete trans
+// @routes DELETE/api/trans/:id
 // @access private
 const deleteTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        //   const contact = await Contact.findById(req.params.id);
-        //   if (!contact) {
-        //     res.status(404).json({ message: " contact not found" });
-        //   } else {
-        //     if (contact.user_id.toSting() != req.user.id) {
-        //       res
-        //         .status(403)
-        //         .json({
-        //           message: "user dont have permission update other user contacts",
-        //         });
-        //     } else {
-        //       await Contact.deleteOne({ _id: req.params.id });
-        //       res.status(200).json(contact);
-        //     }
-        //   }
+        const customReq = req; // Type assertion
+        const contact = yield TransactionModel_1.default.findById(req.params.id);
+        if (!contact) {
+            res.status(404).json({ message: " contact not found" });
+        }
+        else {
+            if (contact.user_id.toString() != customReq.user.id) {
+                res
+                    .status(403)
+                    .json({
+                    message: "user don't have permission update other user contacts",
+                });
+            }
+            else {
+                yield TransactionModel_1.default.deleteOne({ _id: customReq.params.id });
+                res.status(200).json(contact);
+            }
+        }
     }
     catch (error) {
         console.error(error);

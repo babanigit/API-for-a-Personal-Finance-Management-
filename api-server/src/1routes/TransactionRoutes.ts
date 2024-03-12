@@ -19,7 +19,10 @@ router.route("/").post(createTrans);
 
 router.route("/:id").get(getTransId);
 
-router.route("/:id").get(updateTrans);
+router.route("/:id").put(updateTrans);
 
-router.route("/:id").get(deleteTrans);
+router.route("/:id").delete(deleteTrans);
+
+
+export default router;
 

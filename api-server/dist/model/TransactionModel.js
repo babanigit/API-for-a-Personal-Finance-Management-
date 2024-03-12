@@ -22,7 +22,16 @@ const transSchema = new mongoose_1.default.Schema({
         type: String,
         required: [true, "please add the contact phone number"],
     },
+    income: {
+        type: Number,
+        required: [true, "please add the income number"],
+    },
+    expenses: {
+        type: Number,
+        required: [true, "please add the expenses number"],
+    },
 }, {
     timestamps: true,
 });
-exports.default = mongoose_1.default.model("DataTrans", transSchema);
+const monog = mongoose_1.default.model("DataTrans", transSchema);
+exports.default = monog;

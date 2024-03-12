@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import ConnectDb from "./connection/DbConnection";
 
 import userRoutes from "./1routes/UserRoutes"; 
+import TransRoutes from "./1routes/TransactionRoutes"
 
 
 dotenv.config({path:"./.env"})
@@ -15,7 +16,7 @@ ConnectDb();
 
 
 // Routes
-// app.use("/api/transaction", require("./1routes/TransactionRoutes"))
+app.use("/api/transaction", TransRoutes)
 app.use("/api/user", userRoutes)
 
 
