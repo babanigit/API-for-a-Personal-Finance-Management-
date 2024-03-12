@@ -1,5 +1,12 @@
 import { Express,Request, Response } from "express";
 
+import trans from "../model/TransactionModel";
+
+interface CustomRequest extends Request {
+  user: { id: string }; // Define the user property
+}
+
+
 // @desc get all trans
 // @routes GET/api/trans
 // @access private
@@ -14,20 +21,24 @@ const getTrans = (async (req:Request, res:Response):Promise<void> => {
   // @access private
   const createTrans = (async (req:Request, res:Response):Promise<void> => {
     try {
-    //   const { name, email, phone } = await req.body;
-    //   if (!name || !email || !phone) {
-    //     res.status(400).json({ message: "all filed required" });
-    //     // res.status(400);
-    //     // throw new Error({ message: "all field are mandatory" });
-    //   } else {
-    //     const contact = await Contact.create({
-    //       name,
-    //       email,
-    //       phone,
-    //       user_id: req.user.id,
-    //     });
-    //     res.status(201).json(contact);
-    //   }
+
+      const customReq = req as CustomRequest; // Type assertion
+
+      const { name, email, phone } = await req.body;
+      if (!name || !email || !phone) {
+        res.status(400).json({ message: "all filed required" });
+        // res.status(400);
+        // throw new Error({ message: "all field are mandatory" });
+      } else {
+        const contact = await trans.create({
+          name,
+          email,
+          phone,
+          user_id: customReq.user.id,
+        });
+        res.status(201).json(contact);
+      }
+
     } catch (error) {
       console.error(error);
     }

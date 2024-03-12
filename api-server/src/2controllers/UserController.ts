@@ -86,6 +86,7 @@ const getRegister = async (req:Request, res:Response) => {
           // generate Token
           const accessToken = jwt.sign(
             {
+              // this is your jwt payload
               user: {
                 username: user.username,
                 email: user.email,

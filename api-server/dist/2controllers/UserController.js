@@ -78,6 +78,7 @@ const getLogin = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
             if (user && (yield bcrypt_1.default.compare(password, user.password))) {
                 // generate Token
                 const accessToken = jsonwebtoken_1.default.sign({
+                    // this is your jwt payload
                     user: {
                         username: user.username,
                         email: user.email,

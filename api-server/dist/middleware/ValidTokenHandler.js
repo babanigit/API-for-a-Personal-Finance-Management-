@@ -19,11 +19,11 @@ const validateToken = (req, res, next) => __awaiter(void 0, void 0, void 0, func
         const authHeader = req.headers.authorization || req.headers.authorization;
         if (authHeader && authHeader.startsWith("Bearer")) {
             token = authHeader.split(" ")[1];
-            jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET || "", (err, decoded) => {
+            jsonwebtoken_1.default.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
                 if (err)
                     res.status(401).json({ message: "user is not authenticated" });
                 else {
-                    const decodedPayload = decoded;
+                    const decodedPayload = decoded; // Type assertion to JwtPayload
                     req.user = decodedPayload.user; // Assign decoded payload to 'user' property
                     next();
                 }

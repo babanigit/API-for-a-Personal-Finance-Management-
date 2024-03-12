@@ -5,11 +5,11 @@ import mongoose from "mongoose";
 
 const  transSchema= new mongoose.Schema({
 
-    // user_id:{
-    //     type:mongoose.Schema.Types.ObjectId,
-    //     required:true,
-    //     ref:"User"
-    //   },
+    user_id:{
+        type:mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref:"User"
+      },
 
 
 
@@ -30,5 +30,5 @@ const  transSchema= new mongoose.Schema({
     timestamps: true,
   })
 
-  module.exports=mongoose.model("DataTrans",transSchema);
+  export default mongoose.model("DataTrans",transSchema);
 

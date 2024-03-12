@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createTrans = exports.updateTrans = exports.deleteTrans = exports.getTransId = exports.getTrans = void 0;
+const TransactionModel_1 = __importDefault(require("../model/TransactionModel"));
 // @desc get all trans
 // @routes GET/api/trans
 // @access private
@@ -23,20 +27,22 @@ exports.getTrans = getTrans;
 // @access private
 const createTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        //   const { name, email, phone } = await req.body;
-        //   if (!name || !email || !phone) {
-        //     res.status(400).json({ message: "all filed required" });
-        //     // res.status(400);
-        //     // throw new Error({ message: "all field are mandatory" });
-        //   } else {
-        //     const contact = await Contact.create({
-        //       name,
-        //       email,
-        //       phone,
-        //       user_id: req.user.id,
-        //     });
-        //     res.status(201).json(contact);
-        //   }
+        const customReq = req; // Type assertion
+        const { name, email, phone } = yield req.body;
+        if (!name || !email || !phone) {
+            res.status(400).json({ message: "all filed required" });
+            // res.status(400);
+            // throw new Error({ message: "all field are mandatory" });
+        }
+        else {
+            const contact = yield TransactionModel_1.default.create({
+                name,
+                email,
+                phone,
+                user_id: customReq.user.id,
+            });
+            res.status(201).json(contact);
+        }
     }
     catch (error) {
         console.error(error);
