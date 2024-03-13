@@ -15,18 +15,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCurrent = exports.getLogin = exports.getRegister = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-// import { IGetUserAuthInfoRequest } from "../../definationFile";
 const UserModel_1 = __importDefault(require("../model/UserModel"));
 // @desc register a user
-// @routes POST /api/user/register
+// @routes POST /user/register
 // @access public
 const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { username, email, password } = yield req.body;
         if (!username || !email || !password) {
             res.status(400).json({ message: "all filed required" });
-            // res.status(400);
-            // throw new Error({ message: "all field are mandatory" });
         }
         else {
             const userAvailable = yield UserModel_1.default.findOne({ email });
@@ -63,8 +60,8 @@ const getRegister = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.getRegister = getRegister;
-// @desc register a user
-// @routes POST /api/user/login
+// @desc login a user
+// @routes POST /user/login
 // @access public
 const getLogin = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -100,11 +97,10 @@ const getLogin = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 }));
 exports.getLogin = getLogin;
-// @desc register a user
+// @desc get current user
 // @routes GET /api/user/current
 // @access private
 const getCurrent = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log("hello from current");
     res.json(req.user);
 });
 exports.getCurrent = getCurrent;

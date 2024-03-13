@@ -1,10 +1,9 @@
-
-
 import express,{ Express } from "express";
-const router=express.Router();
-import validateToken from "../middleware/ValidTokenHandler";
 
+import validateToken from "../middleware/ValidTokenHandler";
 import { getLogin,getRegister,getCurrent } from "../2controllers/UserController";
+
+const router=express.Router();
 
 router.post("/register",getRegister);
 

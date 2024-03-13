@@ -14,6 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getSummary = exports.createTrans = exports.updateTrans = exports.deleteTrans = exports.getTransId = exports.getTrans = void 0;
 const TransactionModel_1 = __importDefault(require("../model/TransactionModel"));
+// @desc get all transaction with summary
+// @routes GET /transaction/summary
+// @access private
 const getSummary = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const customReq = req; // Type assertion 
@@ -37,15 +40,14 @@ const getSummary = ((req, res) => __awaiter(void 0, void 0, void 0, function* ()
             "total Savings": totalSavings,
             "all Transactions": data,
         });
-        console.log("get transaction");
     }
     catch (error) {
         console.error(error);
     }
 }));
 exports.getSummary = getSummary;
-// @desc get all trans
-// @routes GET/api/trans
+// @desc get all transaction
+// @routes GET /transaction
 // @access private
 const getTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -60,7 +62,7 @@ const getTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
 }));
 exports.getTrans = getTrans;
 // @desc Create new transaction
-// @routes POST/api/trans
+// @routes POST /transaction
 // @access private
 const createTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -88,7 +90,7 @@ const createTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* (
 }));
 exports.createTrans = createTrans;
 // @desc get transaction by id
-// @routes GET/api/trans/:id
+// @routes GET /transaction/:id
 // @access private
 const getTransId = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -106,8 +108,8 @@ const getTransId = ((req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
 }));
 exports.getTransId = getTransId;
-// @desc update trans
-// @routes PUT/api/trans/:id
+// @desc update transaction
+// @routes PUT transaction/:id
 // @access private
 const updateTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -135,8 +137,8 @@ const updateTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
 }));
 exports.updateTrans = updateTrans;
-// @desc delete trans
-// @routes DELETE/api/trans/:id
+// @desc delete transaction
+// @routes DELETE /transaction/:id
 // @access private
 const deleteTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

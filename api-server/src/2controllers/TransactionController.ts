@@ -1,4 +1,4 @@
-import { Express,Request, Response } from "express";
+import { Express ,Request, Response } from "express";
 
 import trans from "../model/TransactionModel";
 import { Document } from "mongoose";
@@ -12,25 +12,16 @@ interface CustomRequest extends Request {
 }
 
 interface Transaction extends Document {
-  _id: string;
-  user_id: string;
-  name: string;
-  email: string;
-  phone: string;
-  createdAt: Date;
-  updatedAt: Date;
-  __v: number;
   expenses: number;
   income: number;
-  savings:number;
 }
 
-
-
+// @desc get all transaction with summary
+// @routes GET /transaction/summary
+// @access private
 const getSummary = (async (req:Request, res:Response):Promise<void> => {
 
   try {
-
     const customReq = req as CustomRequest; // Type assertion 
 
     // it will find all the transaction with your user_id
@@ -51,7 +42,6 @@ const getSummary = (async (req:Request, res:Response):Promise<void> => {
           // total savings
       let totalSavings:number=totalIncome-totalExpenses;
     
-
       res.status(200).json({
         "total income" :totalIncome,
         "total expenses" :totalExpenses,
@@ -60,56 +50,47 @@ const getSummary = (async (req:Request, res:Response):Promise<void> => {
         "all Transactions":data,
       });
 
-      console.log("get transaction" )
-
   } catch (error) {
     console.error(error)
   }
 
-  
   });
 
 
-// @desc get all trans
-// @routes GET/api/trans
+// @desc get all transaction
+// @routes GET /transaction
 // @access private
 const getTrans = (async (req:Request, res:Response):Promise<void> => {
 
   try {
-
     const customReq = req as CustomRequest; // Type assertion
 
     // it will find you all the user id's
     const data = await trans.find({ user_id: customReq.user.id });
     res.status(200).json(data);
 
-    
- 
-
   } catch (error) {
     console.error(error)
   }
 
-  
   });
   
   // @desc Create new transaction
-  // @routes POST/api/trans
+  // @routes POST /transaction
   // @access private
   const createTrans = (async (req:Request, res:Response):Promise<void> => {
+    
     try {
-
       const customReq = req as CustomRequest; // Type assertion
 
       const { TransactionName, income,expenses } = await req.body;
 
       if (!TransactionName || !income || !expenses) {
-
         res.status(400).json({ message: "all filed required" });
         // res.status(400);
         // throw new Error({ message: "all field are mandatory" });
-      } else {
 
+      } else {
         console.log(customReq.user)
         const data = await trans.create({
           TransactionName,
@@ -118,16 +99,17 @@ const getTrans = (async (req:Request, res:Response):Promise<void> => {
           user_id: customReq.user.id,
         });
         res.status(201).json(data);
-      }
 
+      }
 
     } catch (error) {
       console.error(error);
     }
+
   });
   
   // @desc get transaction by id
-  // @routes GET/api/trans/:id
+  // @routes GET /transaction/:id
   // @access private
   const getTransId = (async (req:Request, res:Response):Promise<void> => {
 
@@ -135,6 +117,7 @@ const getTrans = (async (req:Request, res:Response):Promise<void> => {
       const customReq = req as CustomRequest; // Type assertion
 
       const data = await trans.findById(customReq.params.id);
+
     if (!data) {
       res.status(404).json({ message: " Transaction not found" });
     } else {
@@ -145,18 +128,16 @@ const getTrans = (async (req:Request, res:Response):Promise<void> => {
       console.error(error);
     }
     
-
-
   });
   
-  // @desc update trans
-  // @routes PUT/api/trans/:id
+  // @desc update transaction
+  // @routes PUT transaction/:id
   // @access private
   const updateTrans = (async (req:Request, res:Response):Promise<void> => {
 
     try {
-      const customReq = req as CustomRequest; // Type assertion
 
+      const customReq = req as CustomRequest; // Type assertion
 
       const data = await trans.findById(req.params.id);
 
@@ -179,19 +160,18 @@ const getTrans = (async (req:Request, res:Response):Promise<void> => {
       }
     }
 
-
     } catch (error) {
       console.error(error)
     }
 
-    
   });
   
-  // @desc delete trans
-  // @routes DELETE/api/trans/:id
+  // @desc delete transaction
+  // @routes DELETE /transaction/:id
   // @access private
   const deleteTrans = (async (req:Request, res:Response):Promise<void> => {
     try {
+
       const customReq = req as CustomRequest; // Type assertion
 
       const data = await trans.findById(req.params.id);
@@ -209,7 +189,6 @@ const getTrans = (async (req:Request, res:Response):Promise<void> => {
           res.status(200).json(data);
         }
       }
-
 
     } catch (error) {
       console.error(error);

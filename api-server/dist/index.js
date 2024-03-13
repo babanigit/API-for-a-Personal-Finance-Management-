@@ -14,10 +14,12 @@ const port = process.env.PORT;
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
+// DataBase Connection
 (0, DbConnection_1.default)();
 // Routes
 app.use("/transaction", TransactionRoutes_1.default);
 app.use("/user", UserRoutes_1.default);
+// home
 app.get("/", (req, res) => {
     res.status(200).json({
         message: "Finance Management API is live"
