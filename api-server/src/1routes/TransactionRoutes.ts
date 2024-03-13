@@ -8,6 +8,7 @@ import {
     deleteTrans,
     updateTrans,
     createTrans,
+    getSummary,
 }from "../2controllers/TransactionController"
 import validateToken from "../middleware/ValidTokenHandler";
 
@@ -17,11 +18,14 @@ router.route("/").get(getTrans);
 
 router.route("/").post(createTrans);
 
+router.route("/summary").get(getSummary)
+
 router.route("/:id").get(getTransId);
 
 router.route("/:id").put(updateTrans);
 
 router.route("/:id").delete(deleteTrans);
+
 
 
 export default router;

@@ -1,6 +1,7 @@
 import { Express,Request, Response } from "express";
 
 import trans from "../model/TransactionModel";
+import { Document } from "mongoose";
 
 interface CustomRequest extends Request {
   user: { 
@@ -9,6 +10,64 @@ interface CustomRequest extends Request {
     id: string,
   }; // Define the user property
 }
+
+interface Transaction extends Document {
+  _id: string;
+  user_id: string;
+  name: string;
+  email: string;
+  phone: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
+  expenses: number;
+  income: number;
+  savings:number;
+}
+
+
+
+const getSummary = (async (req:Request, res:Response):Promise<void> => {
+
+  try {
+
+    const customReq = req as CustomRequest; // Type assertion 
+
+    // it will find all the transaction with your user_id
+    const contacts:Transaction[] = await trans.find({ user_id: customReq.user.id });
+   
+    // total income
+    let totalIncome:number=0;
+    contacts.forEach((contact) => {
+      totalIncome = totalIncome + contact.income;
+      });
+
+      // total expenses
+      let totalExpenses:number=0;
+      contacts.forEach((contact) => {
+        totalExpenses = totalExpenses + contact.expenses;
+        });
+
+          // total savings
+      let totalSavings:number=totalIncome-totalExpenses;
+    
+
+      res.status(200).json({
+        "total income" :totalIncome,
+        "total expenses" :totalExpenses,
+        "total Savings" :totalSavings,
+
+        "all Transactions":contacts,
+      });
+
+      console.log("get transaction" )
+
+  } catch (error) {
+    console.error(error)
+  }
+
+  
+  });
 
 
 // @desc get all trans
@@ -24,12 +83,14 @@ const getTrans = (async (req:Request, res:Response):Promise<void> => {
     const contacts = await trans.find({ user_id: customReq.user.id });
     res.status(200).json(contacts);
 
+    
+ 
+
   } catch (error) {
     console.error(error)
   }
 
-
- 
+  
   });
   
   // @desc Create new transaction
@@ -40,9 +101,9 @@ const getTrans = (async (req:Request, res:Response):Promise<void> => {
 
       const customReq = req as CustomRequest; // Type assertion
 
-      const { name, email, phone, income,expenses } = await req.body;
+      const { TransactionName, income,expenses } = await req.body;
 
-      if (!name || !email || !phone || !income || !expenses) {
+      if (!TransactionName || !income || !expenses) {
 
         res.status(400).json({ message: "all filed required" });
         // res.status(400);
@@ -51,9 +112,7 @@ const getTrans = (async (req:Request, res:Response):Promise<void> => {
 
         console.log(customReq.user)
         const contact = await trans.create({
-          name,
-          email,
-          phone,
+          TransactionName,
           income,
           expenses,
           user_id: customReq.user.id,
@@ -108,7 +167,7 @@ const getTrans = (async (req:Request, res:Response):Promise<void> => {
         res
           .status(403)
           .json({
-            message: "user dont have permission update other user contacts",
+            message: "user don't have permission update other user contacts",
           });
       } else {
         const updateContact = await trans.findByIdAndUpdate(
@@ -163,5 +222,6 @@ const getTrans = (async (req:Request, res:Response):Promise<void> => {
     deleteTrans,
     updateTrans,
     createTrans,
+    getSummary
   }
   

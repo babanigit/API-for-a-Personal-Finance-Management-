@@ -16,8 +16,8 @@ ConnectDb();
 
 
 // Routes
-app.use("/api/transaction", TransRoutes)
-app.use("/api/user", userRoutes)
+app.use("/transaction", TransRoutes)
+app.use("/user", userRoutes)
 
 
 

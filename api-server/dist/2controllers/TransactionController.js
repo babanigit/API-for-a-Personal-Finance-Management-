@@ -12,8 +12,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createTrans = exports.updateTrans = exports.deleteTrans = exports.getTransId = exports.getTrans = void 0;
+exports.getSummary = exports.createTrans = exports.updateTrans = exports.deleteTrans = exports.getTransId = exports.getTrans = void 0;
 const TransactionModel_1 = __importDefault(require("../model/TransactionModel"));
+const getSummary = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const customReq = req; // Type assertion 
+        // it will find all the transaction with your user_id
+        const contacts = yield TransactionModel_1.default.find({ user_id: customReq.user.id });
+        // total income
+        let totalIncome = 0;
+        contacts.forEach((contact) => {
+            totalIncome = totalIncome + contact.income;
+        });
+        // total expenses
+        let totalExpenses = 0;
+        contacts.forEach((contact) => {
+            totalExpenses = totalExpenses + contact.expenses;
+        });
+        // total savings
+        let totalSavings = totalIncome - totalExpenses;
+        res.status(200).json({
+            "total income": totalIncome,
+            "total expenses": totalExpenses,
+            "total Savings": totalSavings,
+            "all Transactions": contacts,
+        });
+        console.log("get transaction");
+    }
+    catch (error) {
+        console.error(error);
+    }
+}));
+exports.getSummary = getSummary;
 // @desc get all trans
 // @routes GET/api/trans
 // @access private
@@ -35,8 +65,8 @@ exports.getTrans = getTrans;
 const createTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const customReq = req; // Type assertion
-        const { name, email, phone, income, expenses } = yield req.body;
-        if (!name || !email || !phone || !income || !expenses) {
+        const { TransactionName, income, expenses } = yield req.body;
+        if (!TransactionName || !income || !expenses) {
             res.status(400).json({ message: "all filed required" });
             // res.status(400);
             // throw new Error({ message: "all field are mandatory" });
@@ -44,9 +74,7 @@ const createTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* (
         else {
             console.log(customReq.user);
             const contact = yield TransactionModel_1.default.create({
-                name,
-                email,
-                phone,
+                TransactionName,
                 income,
                 expenses,
                 user_id: customReq.user.id,
@@ -93,7 +121,7 @@ const updateTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* (
                 res
                     .status(403)
                     .json({
-                    message: "user dont have permission update other user contacts",
+                    message: "user don't have permission update other user contacts",
                 });
             }
             else {

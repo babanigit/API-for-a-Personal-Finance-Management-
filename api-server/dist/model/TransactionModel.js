@@ -8,19 +8,11 @@ const transSchema = new mongoose_1.default.Schema({
     user_id: {
         type: mongoose_1.default.Schema.Types.ObjectId,
         required: true,
-        ref: "User"
+        ref: "User",
     },
-    name: {
+    TransactionName: {
         type: String,
         required: [true, "please add the contact name"],
-    },
-    email: {
-        type: String,
-        required: [true, "please add the contact email address"],
-    },
-    phone: {
-        type: String,
-        required: [true, "please add the contact phone number"],
     },
     income: {
         type: Number,

@@ -10,6 +10,7 @@ const ValidTokenHandler_1 = __importDefault(require("../middleware/ValidTokenHan
 router.use(ValidTokenHandler_1.default);
 router.route("/").get(TransactionController_1.getTrans);
 router.route("/").post(TransactionController_1.createTrans);
+router.route("/summary").get(TransactionController_1.getSummary);
 router.route("/:id").get(TransactionController_1.getTransId);
 router.route("/:id").put(TransactionController_1.updateTrans);
 router.route("/:id").delete(TransactionController_1.deleteTrans);

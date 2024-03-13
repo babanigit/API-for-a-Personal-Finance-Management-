@@ -16,8 +16,8 @@ app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 (0, DbConnection_1.default)();
 // Routes
-app.use("/api/transaction", TransactionRoutes_1.default);
-app.use("/api/user", UserRoutes_1.default);
+app.use("/transaction", TransactionRoutes_1.default);
+app.use("/user", UserRoutes_1.default);
 app.get("/", (req, res) => {
     res.status(200).json({
         message: "Finance Management API is live"
