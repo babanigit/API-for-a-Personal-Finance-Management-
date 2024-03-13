@@ -18,16 +18,16 @@ const getSummary = ((req, res) => __awaiter(void 0, void 0, void 0, function* ()
     try {
         const customReq = req; // Type assertion 
         // it will find all the transaction with your user_id
-        const contacts = yield TransactionModel_1.default.find({ user_id: customReq.user.id });
+        const data = yield TransactionModel_1.default.find({ user_id: customReq.user.id });
         // total income
         let totalIncome = 0;
-        contacts.forEach((contact) => {
-            totalIncome = totalIncome + contact.income;
+        data.forEach((data) => {
+            totalIncome = totalIncome + data.income;
         });
         // total expenses
         let totalExpenses = 0;
-        contacts.forEach((contact) => {
-            totalExpenses = totalExpenses + contact.expenses;
+        data.forEach((data) => {
+            totalExpenses = totalExpenses + data.expenses;
         });
         // total savings
         let totalSavings = totalIncome - totalExpenses;
@@ -35,7 +35,7 @@ const getSummary = ((req, res) => __awaiter(void 0, void 0, void 0, function* ()
             "total income": totalIncome,
             "total expenses": totalExpenses,
             "total Savings": totalSavings,
-            "all Transactions": contacts,
+            "all Transactions": data,
         });
         console.log("get transaction");
     }
@@ -51,8 +51,8 @@ const getTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const customReq = req; // Type assertion
         // it will find you all the user id's
-        const contacts = yield TransactionModel_1.default.find({ user_id: customReq.user.id });
-        res.status(200).json(contacts);
+        const data = yield TransactionModel_1.default.find({ user_id: customReq.user.id });
+        res.status(200).json(data);
     }
     catch (error) {
         console.error(error);
@@ -73,13 +73,13 @@ const createTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* (
         }
         else {
             console.log(customReq.user);
-            const contact = yield TransactionModel_1.default.create({
+            const data = yield TransactionModel_1.default.create({
                 TransactionName,
                 income,
                 expenses,
                 user_id: customReq.user.id,
             });
-            res.status(201).json(contact);
+            res.status(201).json(data);
         }
     }
     catch (error) {
@@ -93,12 +93,12 @@ exports.createTrans = createTrans;
 const getTransId = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const customReq = req; // Type assertion
-        const contact = yield TransactionModel_1.default.findById(customReq.params.id);
-        if (!contact) {
-            res.status(404).json({ message: " contact not found" });
+        const data = yield TransactionModel_1.default.findById(customReq.params.id);
+        if (!data) {
+            res.status(404).json({ message: " Transaction not found" });
         }
         else {
-            res.status(200).json(contact);
+            res.status(200).json(data);
         }
     }
     catch (error) {
@@ -112,12 +112,12 @@ exports.getTransId = getTransId;
 const updateTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const customReq = req; // Type assertion
-        const contact = yield TransactionModel_1.default.findById(req.params.id);
-        if (!contact) {
-            res.status(404).json({ message: " contact not found" });
+        const data = yield TransactionModel_1.default.findById(req.params.id);
+        if (!data) {
+            res.status(404).json({ message: " transaction not found" });
         }
         else {
-            if (contact.user_id.toString() != customReq.user.id) {
+            if (data.user_id.toString() != customReq.user.id) {
                 res
                     .status(403)
                     .json({
@@ -125,8 +125,8 @@ const updateTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* (
                 });
             }
             else {
-                const updateContact = yield TransactionModel_1.default.findByIdAndUpdate(customReq.params.id, customReq.body, { new: true });
-                res.status(200).json(updateContact);
+                const updatedData = yield TransactionModel_1.default.findByIdAndUpdate(customReq.params.id, customReq.body, { new: true });
+                res.status(200).json(updatedData);
             }
         }
     }
@@ -141,12 +141,12 @@ exports.updateTrans = updateTrans;
 const deleteTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const customReq = req; // Type assertion
-        const contact = yield TransactionModel_1.default.findById(req.params.id);
-        if (!contact) {
-            res.status(404).json({ message: " contact not found" });
+        const data = yield TransactionModel_1.default.findById(req.params.id);
+        if (!data) {
+            res.status(404).json({ message: " Transaction not found" });
         }
         else {
-            if (contact.user_id.toString() != customReq.user.id) {
+            if (data.user_id.toString() != customReq.user.id) {
                 res
                     .status(403)
                     .json({
@@ -155,7 +155,7 @@ const deleteTrans = ((req, res) => __awaiter(void 0, void 0, void 0, function* (
             }
             else {
                 yield TransactionModel_1.default.deleteOne({ _id: customReq.params.id });
-                res.status(200).json(contact);
+                res.status(200).json(data);
             }
         }
     }
